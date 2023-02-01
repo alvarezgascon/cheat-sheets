@@ -2,8 +2,14 @@
 
 ## Instalar MariaDB en Ubuntu 20.04 LTS
 ```bash
-sudo apt update
+# actualizar repositorios
+sudo apt update && sudo upgrade -y
+
+# instalar servidor mariadb
 sudo apt install mariadb-server
+
+# asegurar la instalacion
+# La contraseña predeterminada para Mariadb está en blanco.
 sudo mysql_secure_installation
 ```
 
