@@ -9,7 +9,7 @@ sudo apt update && sudo upgrade -y
 sudo apt install mariadb-server
 
 # asegurar la instalacion
-# La contraseña predeterminada para Mariadb está en blanco.
+# la contraseña predeterminada de Mariadb está en blanco.
 sudo mysql_secure_installation
 ```
 
