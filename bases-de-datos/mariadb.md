@@ -19,7 +19,7 @@ Editar `/etc/mysql/mariadb.conf.d/50-server.cnf` y modificar `bind-address` a:
 ...
 
 bind-address = 0.0.0.0
-# se recomienda no dejarlo abierto sino únicamente a la subred del host cliente
+# Ojo: se recomienda no dejarlo abierto sino únicamente a la subred del host cliente
 
 ...
 ```
