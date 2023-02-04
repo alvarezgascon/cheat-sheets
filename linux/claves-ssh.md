@@ -81,8 +81,42 @@ El mensaje obtenido será similar al siguiente:
 >Now try logging into the machine, with:   "ssh 'ubuntu@213.0.121.1'"
 >and check to make sure that only the key(s) you wanted were added.
   
+ 
+### Método alternativo 1: copiar la clave utilizando ssh
   
+  ```
+  cat ~/.ssh/ejemplo.pub | ssh username@remote_host "mkdir -p ~/.ssh && touch ~/.ssh/authorized_keys && chmod -R go= ~/.ssh && cat >> ~/.ssh/authorized_keys"
+  ``` 
 
+### Método alternativo 2: copiar la clave de forma manual
+  
+  Copiamos mediante el portapapeles el contenido del archivo con la clave pública y lo añadimos al archivo `~/.ssh/authorized_keys` del host.  
+  Para mostrar la clave pública usamos el comando cat:
+  ```
+  cat ~/.ssh/ejemplo.pub
+  ````
+  Obtendremos algo similar a lo siguiente:
+> ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAACAQC+Iv/SFtP1Ptd/4uKjIJ8c9vyuQP0sVIvWLtfgDODHyp0VK5IzGGGOHzsVtkkrHcdKfjAgparJbA0OhMPyW/sLkcG/GPHtjvJwHu4IOj1THKCXhaPYRbgD/31iHDSakbH46PMPuptuF2mN5O1cQ6YlSR5L+MTuZF9oGprCWPVJAvaLYDL913q+7jgAzKl0pauYVsiSEOeXgnlORpdbwmP5sa/LbJowL/TUNgOOVDay+4kboR87wifGIz1+updjH3SfOIvltkhnUuNUByss+LZOo/9wZRuh6MPnM7WU1HXC5kqAlIYoA+79SDUceg/T+cjiYgV+PZWwakzlqg/176vg1xL7BElS3Re7iK3etk2Y1TO5WC6oGg+haUjrNSKrz/X8p0ZdcerSqw8G3UgotgAyGwv8uNVvIo+HOcXeMDeHBVq+Dat5fPu2jS0SVros9RTiZtpAYhku/mXOWt3nrRMCmQrWxXN6Uqb6EuHsJucPX226ZL47RsIkqOqtDQjnGPWINNTuwJC4iTv336eNA5vSC6Ct5DXk5KGQnqRfoMgMdqbwwImwBm8a1Wyizl7qa9hns8fY1ZDAhsM07z0Ej3ya7CoJolzaNylPcud92QJHljt8MXakjCi5KVIVmtLbpM+zbgwybzLBtIffeXTu0E0F955+HNwmtXXnU6qvQgE8TQ== usuario@ejemplo.com
+  
+  Accedemos al host remoto y una vez dentro nos aseguramos de que existe el directorio `~/.ssh`
+ ```bash
+  mkdir -p ~/.ssh
+  ```
+  Nos aseguramos de que existe el archivo `authorized_keys` dentro del directorio `~/.ssh` 
+   ```bash
+  touch ~/.ssh/authorized_keys
+  ```
+  
+  Si ya existe, simplemente añadimos la clave publica al final. Por ejemplo, podemos usar el siguiente comando:
+  ```bash
+  echo cadena_de_text_con_la_clave_pública >> ~/.ssh/authorized_keys
+  ```
+  
+  Ejemplo:
+  ```bash
+  echo AAAAB3NzaC1yc2EAAAADAQABAAACAQC+Iv/SFtP1Ptd/4uKjIJ8c9vyuQP0sVIvWLtfgDODHyp0VK5IzGGGOHzsVtkkrHcdKfjAgparJbA0OhMPyW/sLkcG/GPHtjvJwHu4IOj1THKCXhaPYRbgD/31iHDSakbH46PMPuptuF2mN5O1cQ6YlSR5L+MTuZF9oGprCWPVJAvaLYDL913q+7jgAzKl0pauYVsiSEOeXgnlORpdbwmP5sa/LbJowL/TUNgOOVDay+4kboR87wifGIz1+updjH3SfOIvltkhnUuNUByss+LZOo/9wZRuh6MPnM7WU1HXC5kqAlIYoA+79SDUceg/T+cjiYgV+PZWwakzlqg/176vg1xL7BElS3Re7iK3etk2Y1TO5WC6oGg+haUjrNSKrz/X8p0ZdcerSqw8G3UgotgAyGwv8uNVvIo+HOcXeMDeHBVq+Dat5fPu2jS0SVros9RTiZtpAYhku/mXOWt3nrRMCmQrWxXN6Uqb6EuHsJucPX226ZL47RsIkqOqtDQjnGPWINNTuwJC4iTv336eNA5vSC6Ct5DXk5KGQnqRfoMgMdqbwwImwBm8a1Wyizl7qa9hns8fY1ZDAhsM07z0Ej3ya7CoJolzaNylPcud92QJHljt8MXakjCi5KVIVmtLbpM+zbgwybzLBtIffeXTu0E0F955+HNwmtXXnU6qvQgE8TQ== usuario@ejemplo.com  >> ~/.ssh/authorized_keys
+  ```
+  
 ### Nota 1: huella digital de una clave
 La huella digital o *fingerprint* de un una clave pública se utiliza para verificar la identidad del *host* al que nos conectamos.
 Del mismo modo, el *host* puede verificar nuestra identidad mediante la huella de nuestra clave pública.
