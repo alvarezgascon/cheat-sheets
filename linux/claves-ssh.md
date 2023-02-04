@@ -12,7 +12,7 @@ cd ~/.ssh
 ssh-keygen -t rsa -b 4096 -C "usuario@dominio"
 ```
 El comando anterior nos solicitará el nombre del archivo. Por defecto, nos sugiere **~/.ssh/id_rsa**  
-Al finalizar nos muestra el hash de la clave generada y su visualización mediante una imagen ascii (*random art*).
+Al finalizar nos muestra el [hash](#nota-1-huella-digital-de-una-clave) de la clave generada y su visualización mediante una imagen ascii ([*random art*](#nota-2-ramdom-art)).
 
 **Ejemplo:** 
 ```
@@ -40,6 +40,49 @@ The key's randomart image is:
 ```
 
 
+## Paso 2 - Copiar la clave pública en el servidor
+
+La forma más rápida de copiar la clave pública en el host es usar la utilidad `ssh-copy-id`. 
+Debido a su simplicidad, este método es muy recomendable si está disponible.   
+Si ssh-copy-id no está disponible en la máquina local (cliente), se puede usar uno de los dos métodos alternativos indicadosa continuación.
+
+### Método principal: copiar la clave utilizando ssh-copy-id
+Requisito: para que este método funcione, se debe tener acceso SSH basado en contraseña el su servidor.
+
+La sintaxis es:
+```
+ssh-copy-id -i <clave>.pub usuario@host 
+```
+
+Ejemplo:
+
+```
+ssh-copy-id -i ejemplo.pub ubuntu@213.0.121.1  
+```
+
+El resultado será un mensaje como el siguiente:
+
+>The authenticity of host '213.0.121.1 (213.0.121.1)' can't be established.  
+>RSA key fingerprint is 6x9B5ufHIyPwx1Y7ldpRi3albamSKEvNMBNzNPkPhAs. 
+>Are you sure you want to continue connecting (yes/no)? yes
+
+Esto significa que tu sistema local no reconoce el host remoto. Esto sucederá la primera vez que te conectes a un nuevo host. Escribe "sí" y pulsa `ENTER` para continuar.
+
+A continuación, la utilidad ssh-copy-id buscará el archivo local <clave>.pub creado anteriormente y te pedirá la contraseña de la cuenta del usuario remoto:
+
+
+>/usr/bin/ssh-copy-id: INFO: attempting to log in with the new key(s), to filter out any that are already installed
+>/usr/bin/ssh-copy-id: INFO: 1 key(s) remain to be installed -- if you are prompted now it is to install the new keys
+>ubuntu@213.0.121.1's password:
+
+Tras escribir la contraseña y pulsar `ENTER` se copiará la clave pública en el servidor en el archivo `~/.ssh/authorized_keys`.
+El mensaje obtenido será similar al siguiente:
+>Number of key(s) added: 1
+>Now try logging into the machine, with:   "ssh 'ubuntu@213.0.121.1'"
+>and check to make sure that only the key(s) you wanted were added.
+  
+  
+
 ### Nota 1: huella digital de una clave
 La huella digital o *fingerprint* de un una clave pública se utiliza para verificar la identidad del *host* al que nos conectamos.
 Del mismo modo, el *host* puede verificar nuestra identidad mediante la huella de nuestra clave pública.
@@ -59,7 +102,7 @@ ssh-keygen -lf id_rsa
 4096 SHA256:6x9B5ufHIyPwx1Y7ldpRi3albamSKEvNMBNzNPkPhAs usuario@ejemplo.com (RSA)
 ```
 
-### Nota 2: *ramdom art*
+### Nota 2: *random art*
 
 El *random art* de una huella digital es una forma de visualizar dicho *hash* para poder reconocer fácilmente y de forma visual una huella. 
 Podemos visualizar el *random art* de la huella digital de una clave ssh añadiendo la opción -v al comando ssh-keygen:
@@ -67,7 +110,8 @@ Podemos visualizar el *random art* de la huella digital de una clave ssh añadie
 ```
 ssh-keygen -lvf <nombre_archivo_clave>
 ```
-Ejemplo
+Ejemplo:
+
 ```
 % ssh-keygen -lvf ejemplo
 4096 SHA256:6x9B5ufHIyPwx1Y7ldpRi3albamSKEvNMBNzNPkPhAs usuario@ejemplo.com (RSA)
