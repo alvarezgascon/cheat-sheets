@@ -1,8 +1,8 @@
-# Creación de un par de claves de usuario en Linux (Ubuntu)
-Creación de un par de claves de usuario como método de autenticación en el protocolo SSH.
-
+# Conexión a un servidor mediante SSH utilizando un par de claves  
 
 ## Paso 1 - Creación del par de claves
+Creación de un par de claves de usuario como método de autenticación en el protocolo SSH.
+
 ```bash
 # almacenaremos la clave privada en ~/.ssh
 cd ~/.ssh
@@ -117,6 +117,40 @@ El mensaje obtenido será similar al siguiente:
   echo AAAAB3NzaC1yc2EAAAADAQABAAACAQC+Iv/SFtP1Ptd/4uKjIJ8c9vyuQP0sVIvWLtfgDODHyp0VK5IzGGGOHzsVtkkrHcdKfjAgparJbA0OhMPyW/sLkcG/GPHtjvJwHu4IOj1THKCXhaPYRbgD/31iHDSakbH46PMPuptuF2mN5O1cQ6YlSR5L+MTuZF9oGprCWPVJAvaLYDL913q+7jgAzKl0pauYVsiSEOeXgnlORpdbwmP5sa/LbJowL/TUNgOOVDay+4kboR87wifGIz1+updjH3SfOIvltkhnUuNUByss+LZOo/9wZRuh6MPnM7WU1HXC5kqAlIYoA+79SDUceg/T+cjiYgV+PZWwakzlqg/176vg1xL7BElS3Re7iK3etk2Y1TO5WC6oGg+haUjrNSKrz/X8p0ZdcerSqw8G3UgotgAyGwv8uNVvIo+HOcXeMDeHBVq+Dat5fPu2jS0SVros9RTiZtpAYhku/mXOWt3nrRMCmQrWxXN6Uqb6EuHsJucPX226ZL47RsIkqOqtDQjnGPWINNTuwJC4iTv336eNA5vSC6Ct5DXk5KGQnqRfoMgMdqbwwImwBm8a1Wyizl7qa9hns8fY1ZDAhsM07z0Ej3ya7CoJolzaNylPcud92QJHljt8MXakjCi5KVIVmtLbpM+zbgwybzLBtIffeXTu0E0F955+HNwmtXXnU6qvQgE8TQ== usuario@ejemplo.com  >> ~/.ssh/authorized_keys
   ```
   
+
+## Paso 3 - Conexión al servidor mediante SHH utilizando el par de claves
+  
+  Si el archivo de claves que hemos creado se llama id_rsa.pub nos conectaremos usando el siguiente comando:
+  
+  ```
+  ssh usuario@host
+  ```
+  
+  En caso de que dispongamos de varias claves y queramos utilizar una diferente a id_rsa.pub nos conectaremos usando el siguiente comando:
+  ```
+  ssh -i <clave>.pub usuario@host
+  ```
+  
+  Ejemplo:
+  ```bash
+  ssh -i ~/.ssh/ejemplo.pub ubuntu@213.0.121.1
+  ```
+  
+## Paso 4 - Deshabilitar la autenticación mediante contraseñas en el servidor
+  
+  ```bash
+  sudo nano /etc/ssh/sshd_config
+  ```  
+Añadimos la siguiente línea
+  > . . .
+  >PasswordAuthentication no
+  > . . .
+  
+  Reiniciamos el servidor SSH
+  
+  ```bash
+  sudo systemctl restart ssh
+  ```
 ### Nota 1: huella digital de una clave
 La huella digital o *fingerprint* de un una clave pública se utiliza para verificar la identidad del *host* al que nos conectamos.
 Del mismo modo, el *host* puede verificar nuestra identidad mediante la huella de nuestra clave pública.
