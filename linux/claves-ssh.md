@@ -136,15 +136,30 @@ El mensaje obtenido será similar al siguiente:
   ssh -i ~/.ssh/ejemplo.pub ubuntu@213.0.121.1
   ```
   
+  Para evitar tener que seleccionar el archivo de identidad cada vez que nos conectamos a un host, podemos crear un archivo **`config`** dentro del directorio `~/.ssh`. 
+  Por ejemplo, para conectarnos a github.com utilizando la identidad id_github ejecutariamos el siguiente comando:
+
+  ```bash
+  nano ~/.ssh/config
+  ```
+  añadiendo las siguientes líneas de texto:
+  
+      Host github.com  
+          Port 22  
+          User git  
+          IdentityFile ~/.ssh/id_github  
+
+
+  
 ## Paso 4 - Deshabilitar la autenticación mediante contraseñas en el servidor
   
   ```bash
   sudo nano /etc/ssh/sshd_config
   ```  
 Añadimos la siguiente línea
-  > . . .
-  >PasswordAuthentication no
-  > . . .
+  
+      PasswordAuthentication no
+      
   
   Reiniciamos el servidor SSH
   
@@ -199,7 +214,7 @@ Ejemplo:
 
 Normalmente es usado para visualizar las claves del *host* al que nos conectamos. En este caso, debemos configurar nuestro cliente SSHS añadiendo al fichero local **/etc/ssh/ssh_config** la opción **VisualHostKey**:
 
->VisualHostKey yes
+    VisualHostKey yes
 
 ### Recomendaciones de seguridad
 1. Protege la clave privada con una **contraseña segura**, de un mínimo de 12 caracteres que contenga mayúsculas, minúsculas, números y símbolos.
