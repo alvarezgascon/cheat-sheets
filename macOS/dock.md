@@ -8,3 +8,8 @@ write com.apple.dock persistent-apps -array-add '{"tile-type"="spacer-tile";}'; 
 
 ## Eliminar un separador en el Dock de macOS
 Botón derecho > Eliminar del Dock
+
+## Reestablecer la configuración del Dock a los ajustes por defecto
+```
+defaults delete com.apple.dock; killall Dock
+```
